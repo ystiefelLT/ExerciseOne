@@ -1,14 +1,12 @@
 package com.example.exerciseone;
 
-import android.net.Uri;
-
 public class Contact {
     String mName;
     String mPhoneNumber;
     String mEmail;
-    String mImage;
+    int mImage;
 
-    Contact(String name, String phoneNumber, String email, String image){
+    Contact(String name, String phoneNumber, String email, int image) {
         mName = name;
         mPhoneNumber = phoneNumber;
         mEmail = email;

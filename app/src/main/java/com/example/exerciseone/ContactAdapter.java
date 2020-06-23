@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder>{
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
 
     private ItemClickListener mClickListener;
     private LayoutInflater mInflater;
     private List<Contact> mData;
 
-    ContactAdapter(Context context, List<Contact> data){
+    ContactAdapter(Context context, List<Contact> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
+
     @NonNull
     @Override
     public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,6 +41,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         return mData.size();
     }
 
+
+    void setClickListener(ItemClickListener itemClickListener) {
+        mClickListener = itemClickListener;
+    }
+
+
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextView;
@@ -57,10 +63,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         }
     }
 
-    void setClickListener(ItemClickListener itemClickListener){
-        mClickListener = itemClickListener;
-    }
-                          // parent activity will implement this method to respond to click events
+    // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
