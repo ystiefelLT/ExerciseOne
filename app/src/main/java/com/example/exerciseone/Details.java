@@ -22,14 +22,15 @@ public class Details extends AppCompatActivity {
 
         setContentView(R.layout.activity_details);
 
+        Contact contact = this.getIntent().getParcelableExtra("contact");
+
         // set image
-        int imageIdx = this.getIntent().getIntExtra("image", ContactRepository.EMPTY_IMAGE_RES);
-        imageIdx = imageIdx != ContactRepository.EMPTY_IMAGE_RES ? imageIdx : R.drawable.empty_portrait;
+        int imageIdx = contact.mImage != ContactRepository.EMPTY_IMAGE_RES ? contact.mImage: R.drawable.empty_portrait;
         ((ImageView) findViewById(R.id.imageView2)).setImageResource(imageIdx);
 
         // set email
-        ((TextView) findViewById(R.id.phoneView)).setText(this.getIntent().getStringExtra("phone"));
-        String email = this.getIntent().getStringExtra("email");
+        ((TextView) findViewById(R.id.phoneView)).setText(contact.mPhoneNumber);
+        String email = contact.mEmail;
         if (email != null) {
             ((TextView) findViewById(R.id.emailView)).setText(email);
         } else {
@@ -37,7 +38,7 @@ public class Details extends AppCompatActivity {
         }
 
         // set name
-        ((TextView) findViewById(R.id.nameView)).setText(this.getIntent().getStringExtra("name"));
+        ((TextView) findViewById(R.id.nameView)).setText(contact.mName);
     }
 
     @Override
