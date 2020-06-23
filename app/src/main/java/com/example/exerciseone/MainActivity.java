@@ -16,7 +16,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ContactAdapter.ItemClickListener {
 
     ContactAdapter mAdapter;
-    private final boolean USE_PHONE_CONTACTS = false;
+    private final boolean USE_PHONE_CONTACTS = true;
     private final int REQUEST_READ_CONTACTS = 79;
     private List<Contact> mContactList = null;
 

@@ -34,7 +34,7 @@ public class Details extends AppCompatActivity {
         else{
             ((ImageView) findViewById(R.id.imageView2)).setImageURI(Uri.parse(image));
         }
-        
+
         ((TextView) findViewById(R.id.phoneView)).setText(this.getIntent().getStringExtra("phone"));
         String email = this.getIntent().getStringExtra("email");
         if(email != null){
