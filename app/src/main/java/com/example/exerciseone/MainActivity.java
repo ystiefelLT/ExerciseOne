@@ -7,16 +7,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ContactAdapter.ItemClickListener {
 
     ContactAdapter mAdapter;
-    private final boolean USE_PHONE_CONTACTS = true;
     private final int REQUEST_READ_CONTACTS = 79;
     private List<Contact> mContactList = null;
 
@@ -24,29 +23,25 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(!USE_PHONE_CONTACTS) {
-            //hard coded contact initialization
-            mContactList = ContactRepository.getContacts();
+        checkPermissions();
+        if(mContactList != null && mContactList.size() > 0) {
+            RecyclerView recyclerView = findViewById(R.id.rv_contacts);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mAdapter = new ContactAdapter(this, mContactList);
+            mAdapter.setClickListener(this);
         }
         else{
-            checkPermissions();
+            CharSequence text = "Error: no contacts, please check phone permissions";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
         }
-
-        RecyclerView recyclerView = findViewById(R.id.rv_contacts);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ContactAdapter(this, mContactList);
-        mAdapter.setClickListener(this);
-        recyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        Contact contact = mContactList.get(position);
-        Intent intent = new Intent(this, Details.class);
-        intent.putExtra("name", contact.mName);
-        intent.putExtra("image", contact.mImage);
-        intent.putExtra("email", contact.mEmail);
-        intent.putExtra("phone", contact.mPhoneNumber);
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra("contact", mContactList.get(position));
         startActivity(intent);
 
     }
@@ -64,11 +59,6 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
     private void requestPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
             // show UI part if you want here to show some rationale !!!
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
-                    REQUEST_READ_CONTACTS);
-        }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
                     REQUEST_READ_CONTACTS);
