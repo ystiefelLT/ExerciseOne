@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent = new Intent(this, Details.class);
+        Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("contact", mContactList.get(position));
         startActivity(intent);
     }
