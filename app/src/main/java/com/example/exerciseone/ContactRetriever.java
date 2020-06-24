@@ -16,7 +16,7 @@ public class ContactRetriever {
         ContentResolver cr = context.getContentResolver();
         String[] contactColumns = {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID};
 
-        
+
         Cursor contactCursor = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 contactColumns, null, null, null);
 
