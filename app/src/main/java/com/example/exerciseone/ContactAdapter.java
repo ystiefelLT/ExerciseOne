@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,29 +15,29 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder>{
 
 
-    private ItemClickListener mClickListener;
-    private LayoutInflater mInflater;
-    private List<Contact> mData;
+    private ItemClickListener clickListener;
+    private LayoutInflater inflater;
+    private List<Contact> contactList;
 
     ContactAdapter(Context context, List<Contact> data){
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.inflater = LayoutInflater.from(context);
+        this.contactList = data;
     }
     @NonNull
     @Override
     public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.contact_name, parent, false));
+        return new ViewHolder(inflater.inflate(R.layout.contact_name, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
-        String name = mData.get(position).mName;
+        String name = contactList.get(position).name;
         holder.myTextView.setText(name);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return contactList.size();
     }
 
     // stores and recycles views as they are scrolled off screen
@@ -53,14 +52,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
     void setClickListener(ItemClickListener itemClickListener){
-        mClickListener = itemClickListener;
+        clickListener = itemClickListener;
     }
-                          // parent activity will implement this method to respond to click events
+    // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }

@@ -1,20 +1,19 @@
 package com.example.exerciseone;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Contact implements Parcelable {
-    String mName;
-    String mPhoneNumber;
-    String mEmail;
-    String mImage;
+    String name;
+    String phoneNumber;
+    String email;
+    String image;
 
-    Contact(String name, String phoneNumber, String email, String image){
-        mName = name;
-        mPhoneNumber = phoneNumber;
-        mEmail = email;
-        mImage = image;
+    Contact(String name, String phoneNumber, String email, String image) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.image = image;
     }
 
     @Override
@@ -24,17 +23,17 @@ public class Contact implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mName);
-        dest.writeString(this.mPhoneNumber);
-        dest.writeString(this.mEmail);
-        dest.writeString(this.mImage);
+        dest.writeString(this.name);
+        dest.writeString(this.phoneNumber);
+        dest.writeString(this.email);
+        dest.writeString(this.image);
     }
 
     protected Contact(Parcel in) {
-        this.mName = in.readString();
-        this.mPhoneNumber = in.readString();
-        this.mEmail = in.readString();
-        this.mImage = in.readString();
+        this.name = in.readString();
+        this.phoneNumber = in.readString();
+        this.email = in.readString();
+        this.image = in.readString();
     }
 
     public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {

@@ -1,39 +1,61 @@
 package com.example.exerciseone;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ContactAdapter.ItemClickListener {
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
-    ContactAdapter mAdapter;
+public class MainActivity extends AppCompatActivity implements ContactAdapter.ItemClickListener,
+        EasyPermissions.PermissionCallbacks {
+
+    private ContactAdapter adapter;
     private final int REQUEST_READ_CONTACTS = 79;
-    private List<Contact> mContactList = null;
+    private List<Contact> contactList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        checkPermissions();
-        if(mContactList != null && mContactList.size() > 0) {
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // moved this from onCreate to onResume to handle cases where the user adds new contacts while the app is open
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_CONTACTS)) {
+            displayContacts();
+        } else {
+            EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.rationale_contact),
+                    REQUEST_READ_CONTACTS,
+                    Manifest.permission.READ_CONTACTS);
+        }
+    }
+
+    private void displayContacts() {
+        contactList = ContactRetriever.getContacts(this);
+        if (contactList != null && contactList.size() > 0) {
             RecyclerView recyclerView = findViewById(R.id.rv_contacts);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mAdapter = new ContactAdapter(this, mContactList);
-            mAdapter.setClickListener(this);
-        }
-        else{
-            CharSequence text = "Error: no contacts, please check phone permissions";
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(this, text, duration);
+            adapter = new ContactAdapter(this, contactList);
+            adapter.setClickListener(this);
+            recyclerView.setAdapter(adapter);
+        } else {
+            String text = "Error: no contacts found";
+            Toast toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
             toast.show();
         }
     }
@@ -41,45 +63,44 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra("contact", mContactList.get(position));
+        intent.putExtra("contact", contactList.get(position));
         startActivity(intent);
 
-    }
-
-
-    private void checkPermissions(){
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
-                == PackageManager.PERMISSION_GRANTED) {
-            mContactList = ContactPhone.getContacts(this);
-        } else {
-            requestPermission();
-        }
-    }
-
-    private void requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
-            // show UI part if you want here to show some rationale !!!
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
-                    REQUEST_READ_CONTACTS);
-        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_READ_CONTACTS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mContactList = ContactPhone.getContacts(this);
-                } else {
-                    // permission denied,Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            displayContacts();
         }
     }
 
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        new AppSettingsDialog.Builder(this).build().show();
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_CONTACTS)) {
+                displayContacts();
+            } else {
+                String text = "Error: permissions denied";
+                Toast toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
 }

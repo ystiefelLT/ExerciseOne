@@ -1,7 +1,5 @@
 package com.example.exerciseone;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +8,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -17,7 +17,6 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // move the details to full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -28,25 +27,35 @@ public class DetailsActivity extends AppCompatActivity {
 
         Contact contact = this.getIntent().getParcelableExtra("contact");
 
-        String image = contact.mImage;
+        showImage(contact.image);
+        showText(contact.name, (TextView) findViewById(R.id.name_text));
+        showText(contact.email, (TextView) findViewById(R.id.email_text));
+        showText(contact.phoneNumber, (TextView) findViewById(R.id.phone_num_text));
+
+    }
+
+
+    private void showImage(String image){
         if(image == null){
-            ((ImageView) findViewById(R.id.imageView2)).setImageResource(R.drawable.empty_portrait);
+            Glide.with(this)
+                    .load(this.getDrawable(R.drawable.empty_portrait))
+                    .into((ImageView) findViewById(R.id.contact_image));
         }
         else{
             Glide.with(this)
                     .load(Uri.parse(image))
-                    .into((ImageView) findViewById(R.id.imageView2));
+                    .into((ImageView) findViewById(R.id.contact_image));
         }
+    }
 
-        ((TextView) findViewById(R.id.phoneView)).setText(contact.mPhoneNumber);
-        String email = contact.mEmail;
-        if(email != null){
-            ((TextView) findViewById(R.id.emailView)).setText(email);
+    private void showText(String text, TextView textView){
+        // if the field either does not exist or is an empty string
+        if(text == null || text.equals("")){
+            textView.setVisibility(View.GONE);
         }
-        else {
-            findViewById(R.id.emailView).setVisibility(View.GONE);
+        else{
+            textView.setText(text);
         }
-        ((TextView) findViewById(R.id.nameView)).setText(contact.mName);
     }
 
     @Override
