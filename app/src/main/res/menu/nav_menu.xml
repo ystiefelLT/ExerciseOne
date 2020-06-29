@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/contactListFrag"
+        android:icon="@drawable/person_icon"
+        android:title="Contacts" />
+
+    <item
+        android:id="@+id/detailsFrag"
+        android:icon="@drawable/puzzle_icon"
+        android:title="Details" />
+
+    <item
+        android:id="@+id/hiddenContacts"
+        android:icon="@drawable/folder_icon"
+        android:title="Hidden" />
+
+
+</menu>

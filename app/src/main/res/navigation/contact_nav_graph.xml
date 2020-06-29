@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contact_nav_graph"
+    app:startDestination="@id/contactListFrag">
+
+    <fragment
+        android:id="@+id/contactListFrag"
+        android:name="com.example.exerciseone.ContactListFrag"
+        android:label="fragment_contact_list"
+        tools:layout="@layout/fragment_contact_list">
+
+        <action
+            android:id="@+id/action_contactListFrag_to_detailsFrag"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:destination="@id/detailsFrag" />
+        <action
+            android:id="@+id/action_contactListFrag_to_hiddenFrag"
+            app:destination="@id/hiddenContacts" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFrag"
+        android:name="com.example.exerciseone.DetailsFrag"
+        android:label="fragment_contact_details"
+        tools:layout="@layout/fragment_contact_details">
+
+        <action
+            android:id="@+id/action_detailsFrag_to_hiddenContactsFrag"
+            app:destination="@id/contactListFrag" />
+
+        <action
+            android:id="@+id/action_detailsFrag_to_contactLisFrag"
+            app:destination="@id/contactListFrag" />
+    </fragment>
+    <fragment
+        android:id="@+id/hiddenContacts"
+        android:name="com.example.exerciseone.HiddenContactsFrag"
+        android:label="fragment_reveal_contacts"
+        tools:layout="@layout/fragment_contact_list">
+        <action
+            android:id="@+id/action_hiddenFrag_to_contactListFrag"
+            app:destination="@id/contactListFrag" />
+        <action
+            android:id="@+id/action_hiddenFrag_to_detailsFrag"
+            app:destination="@id/detailsFrag" />
+    </fragment>
+
+</navigation>

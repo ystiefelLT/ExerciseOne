@@ -3,31 +3,45 @@ package com.example.exerciseone;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends AppCompatActivity implements ContactAdapter.ItemClickListener,
-        EasyPermissions.PermissionCallbacks {
+public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
-    private ContactAdapter adapter;
     private final int REQUEST_READ_CONTACTS = 79;
-    private List<Contact> contactList = null;
-
+    private ContactsViewModel contactsViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        NavHostFragment host = NavHostFragment.create(R.navigation.contact_nav_graph);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, host).setPrimaryNavigationFragment(host).commit();
 
+        final NavController navController = Navigation.findNavController(this, R.id.fragment_container);
+        BottomNavigationView navView = findViewById(R.id.bottom_nav);
+        NavigationUI.setupWithNavController(navView, navController);
+
+//        View hiddenBtn = findViewById(R.id.hiddenContacts);
+//        hiddenBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                navController.navigate(R.id.action_contactListFrag_to_hiddenFrag);
+//            }
+//        });
     }
 
     @Override
@@ -35,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
         super.onResume();
         // moved this from onCreate to onResume to handle cases where the user adds new contacts while the app is open
         if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_CONTACTS)) {
-            displayContacts();
+            initializeViewModel();
         } else {
             EasyPermissions.requestPermissions(
                     this,
@@ -45,14 +59,11 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
         }
     }
 
-    private void displayContacts() {
-        contactList = ContactRetriever.getContacts(this);
+    private void initializeViewModel(){
+        ArrayList<Contact> contactList= ContactRetriever.getContacts(this);
         if (contactList != null && contactList.size() > 0) {
-            RecyclerView recyclerView = findViewById(R.id.rv_contacts);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            adapter = new ContactAdapter(this, contactList);
-            adapter.setClickListener(this);
-            recyclerView.setAdapter(adapter);
+            contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
+            contactsViewModel.contactList.setValue(contactList);
         } else {
             String text = "Error: no contacts found";
             Toast toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
@@ -60,13 +71,6 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
         }
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra("contact", contactList.get(position));
-        startActivity(intent);
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
         if (requestCode == REQUEST_READ_CONTACTS) {
-            displayContacts();
+            initializeViewModel();
         }
     }
 
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.It
 
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_CONTACTS)) {
-                displayContacts();
+                initializeViewModel();
             } else {
                 String text = "Error: permissions denied";
                 Toast toast = Toast.makeText(this, text, Toast.LENGTH_LONG);

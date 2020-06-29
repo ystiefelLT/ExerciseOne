@@ -6,13 +6,12 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ContactRetriever {
 
-    public static List<Contact> getContacts(Context context) {
-        List<Contact> contactList = new ArrayList<>();
+    public static ArrayList<Contact> getContacts(Context context) {
+        ArrayList<Contact> contactList = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         String[] contactColumns = {ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts._ID};
 

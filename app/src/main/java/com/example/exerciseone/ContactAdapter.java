@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder>{
@@ -17,9 +18,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     private ItemClickListener clickListener;
     private LayoutInflater inflater;
-    private List<Contact> contactList;
+    private MutableLiveData<ArrayList<Contact>> contactList;
 
-    ContactAdapter(Context context, List<Contact> data){
+    ContactAdapter(Context context, MutableLiveData<ArrayList<Contact>> data){
         this.inflater = LayoutInflater.from(context);
         this.contactList = data;
     }
@@ -31,13 +32,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
-        String name = contactList.get(position).name;
+        String name = contactList.getValue().get(position).name;
         holder.myTextView.setText(name);
     }
 
     @Override
     public int getItemCount() {
-        return contactList.size();
+        return contactList.getValue().size();
     }
 
     // stores and recycles views as they are scrolled off screen

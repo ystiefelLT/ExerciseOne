@@ -8,6 +8,7 @@ public class Contact implements Parcelable {
     String phoneNumber;
     String email;
     String image;
+    boolean isHidden = false; // initialized as false
 
     Contact(String name, String phoneNumber, String email, String image) {
         this.name = name;
@@ -27,6 +28,7 @@ public class Contact implements Parcelable {
         dest.writeString(this.phoneNumber);
         dest.writeString(this.email);
         dest.writeString(this.image);
+        dest.writeBoolean(this.isHidden);
     }
 
     protected Contact(Parcel in) {
@@ -34,6 +36,7 @@ public class Contact implements Parcelable {
         this.phoneNumber = in.readString();
         this.email = in.readString();
         this.image = in.readString();
+        this.isHidden = in.readBoolean();
     }
 
     public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {
