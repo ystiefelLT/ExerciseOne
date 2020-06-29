@@ -5,6 +5,6 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     android:id="@+id/rv_contacts"
-    tools:context=".ContactListFrag">
+    tools:context=".fragments.ContactListFrag">
 
 </androidx.recyclerview.widget.RecyclerView>

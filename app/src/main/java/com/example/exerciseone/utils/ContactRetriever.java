@@ -1,9 +1,11 @@
-package com.example.exerciseone;
+package com.example.exerciseone.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+
+import com.example.exerciseone.models.Contact;
 
 import java.util.ArrayList;
 

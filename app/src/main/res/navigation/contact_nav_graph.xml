@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/contactListFrag"
-        android:name="com.example.exerciseone.ContactListFrag"
+        android:name="com.example.exerciseone.fragments.ContactListFrag"
         android:label="fragment_contact_list"
         tools:layout="@layout/fragment_contact_list">
 
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/detailsFrag"
-        android:name="com.example.exerciseone.DetailsFrag"
+        android:name="com.example.exerciseone.fragments.DetailsFrag"
         android:label="fragment_contact_details"
         tools:layout="@layout/fragment_contact_details">
 
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/hiddenContacts"
-        android:name="com.example.exerciseone.HiddenContactsFrag"
+        android:name="com.example.exerciseone.fragments.HiddenContactsFrag"
         android:label="fragment_reveal_contacts"
         tools:layout="@layout/fragment_contact_list">
         <action

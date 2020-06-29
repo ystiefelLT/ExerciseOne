@@ -1,4 +1,4 @@
-package com.example.exerciseone;
+package com.example.exerciseone.activties;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,6 +11,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.exerciseone.models.Contact;
+import com.example.exerciseone.utils.ContactRetriever;
+import com.example.exerciseone.models.ContactsViewModel;
+import com.example.exerciseone.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -27,21 +31,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        NavHostFragment host = NavHostFragment.create(R.navigation.contact_nav_graph);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, host).setPrimaryNavigationFragment(host).commit();
-
         final NavController navController = Navigation.findNavController(this, R.id.fragment_container);
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
         NavigationUI.setupWithNavController(navView, navController);
 
-//        View hiddenBtn = findViewById(R.id.hiddenContacts);
-//        hiddenBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                navController.navigate(R.id.action_contactListFrag_to_hiddenFrag);
-//            }
-//        });
     }
 
     @Override

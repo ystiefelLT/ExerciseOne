@@ -1,4 +1,4 @@
-package com.example.exerciseone;
+package com.example.exerciseone.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +11,12 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.example.exerciseone.R;
+import com.example.exerciseone.models.ContactsViewModel;
 
 public class DetailsFrag extends Fragment {
 
@@ -26,8 +29,6 @@ public class DetailsFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         View view = inflater.inflate(R.layout.fragment_contact_details, container, false);
         if(viewModel.selectedContact == null){
             showImage(view, null);
@@ -45,25 +46,17 @@ public class DetailsFrag extends Fragment {
     private void initBtn(View view, final boolean isHidden){
         Button btn = view.findViewById(R.id.hide_btn);
         if(isHidden){
-            btn.setText("Show contact");
+            btn.setText(R.string.show_contact);
         }
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isHidden){
-                    //move contact to show list
-                    viewModel.contactList.getValue().add(viewModel.selectedContact);
-                    viewModel.hiddenList.getValue().remove(viewModel.selectedContact);
-                }
-                else {
-                    //move contact to hidden list
-                    viewModel.hiddenList.getValue().add(viewModel.selectedContact);
-                    viewModel.contactList.getValue().remove(viewModel.selectedContact);
-                }
-                viewModel.selectedContact.isHidden = !isHidden; // flips the hidden boolean
+                viewModel.hideShowContact();
                 // switch fragments
-                if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.detailsFrag) {
-                    Navigation.findNavController(view).navigate(R.id.action_detailsFrag_to_contactLisFrag);
+                NavController navController = Navigation.findNavController(view);
+                if (navController.getCurrentDestination()!= null
+                        && navController.getCurrentDestination().getId() == R.id.detailsFrag) {
+                    navController.navigate(R.id.action_detailsFrag_to_contactLisFrag);
                 }
             }
         });

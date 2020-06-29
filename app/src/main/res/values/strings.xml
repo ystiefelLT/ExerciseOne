@@ -2,6 +2,7 @@
     <string name="app_name">ExerciseOne</string>
     <string name="contact_image">contact image</string>
     <string name="rationale_contact">This app needs access to your contacts.</string>
+    <string name="show_contact">Show contact</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

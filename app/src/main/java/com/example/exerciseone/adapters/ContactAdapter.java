@@ -1,4 +1,4 @@
-package com.example.exerciseone;
+package com.example.exerciseone.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.exerciseone.models.Contact;
+import com.example.exerciseone.R;
+
 import java.util.ArrayList;
 
 // https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example
@@ -20,7 +23,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     private LayoutInflater inflater;
     private MutableLiveData<ArrayList<Contact>> contactList;
 
-    ContactAdapter(Context context, MutableLiveData<ArrayList<Contact>> data){
+    public ContactAdapter(Context context, MutableLiveData<ArrayList<Contact>> data){
         this.inflater = LayoutInflater.from(context);
         this.contactList = data;
     }
@@ -57,7 +60,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         }
     }
 
-    void setClickListener(ItemClickListener itemClickListener){
+    public void setClickListener(ItemClickListener itemClickListener){
         clickListener = itemClickListener;
     }
     // parent activity will implement this method to respond to click events

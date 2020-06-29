@@ -1,16 +1,16 @@
-package com.example.exerciseone;
+package com.example.exerciseone.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Contact implements Parcelable {
-    String name;
-    String phoneNumber;
-    String email;
-    String image;
-    boolean isHidden = false; // initialized as false
+    public String name;
+    public String phoneNumber;
+    public String email;
+    public String image;
+    public boolean isHidden = false; // initialized as false
 
-    Contact(String name, String phoneNumber, String email, String image) {
+    public Contact(String name, String phoneNumber, String email, String image) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
